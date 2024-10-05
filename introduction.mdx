@@ -1,18 +1,121 @@
 ---
-title: Introduction
-description: 'Welcome to the home of your new documentation'
+title: the basics 
+description: 'understand what your voice calls are doing in less than 3 mins'
 ---
 
 <img
   className="block dark:hidden"
-  src="/images/hero-light.svg"
+  src="/images/hero.png"
   alt="Hero Light"
 />
 <img
   className="hidden dark:block"
-  src="/images/hero-dark.svg"
+  src="/images/hero.png"
   alt="Hero Dark"
 />
+
+
+## what is volt?
+
+_name_ is tbh; volt is a analytics tool for your voice ai applications.
+
+you can proxy your calls and not only log them, but also understand what went right and wrong in every call.
+
+
+
+## setting up volt
+
+<Warning>
+  volt is in `alpha` - everything is subject to change and most features are not available yet.
+</Warning>
+
+### first class support
+
+built in, easy to use support for frameworks
+
+<Icon icon="check" iconType="thin" /> openai realtime wss
+
+<Icon icon="x" iconType="thin" /> openai typescript sdk (coming soon)
+
+<Icon icon="x" iconType="thin" /> openai python sdk (coming soon)
+
+<Icon icon="x" iconType="thin" /> vapi (coming soon)
+
+<Icon icon="x" iconType="thin" /> openai livekit (coming soon)
+
+some of these frameworks might work out of the box, but not tested unless mentioned above.
+
+
+
+## basic example usage
+
+this is an example using default (`in-secure`) proxy mode, to learn more about proxy modes check [here](/proxy-modes)
+
+<Steps>
+  <Step title="setup account">
+    head over to [volt.bench.audio](https://volt.bench.audio) and sign up with github for free.
+  </Step>
+  <Step title="get project/api key">
+    go to your project -> settings -> api keys and create a new key. you will need both your project id and api key in order to use volt.
+    <Frame caption="your project settings page">
+      <img src="/images/settings.jpeg" />
+    </Frame>
+  </Step>
+  <Step title="change wss url to proxy url">
+  point your application to volt's proxy url.
+   ```
+   https://wss.volt.bench.audio/p/{projectId}?voltToken=v_tok_{apiKey}
+   ```
+
+
+  <Accordion title="using openai-realtime-console? two more steps (small once i promise)">
+ 
+
+   if you are using [openai-realtime-console](https://github.com/openai/openai-realtime-console?tab=readme-ov-file), you will have to make these slight changes
+
+
+
+   1. update where the api key is gotten from `localStorage`
+   
+   ```ts
+   const apiKey =
+		localStorage.getItem("tmp::voice_api_key") ||
+		prompt("OpenAI API Key") ||
+		"";
+	if (apiKey !== "") {
+		localStorage.setItem("tmp::voice_api_key", apiKey);
+	}
+   ```
+
+   2. update where the `RealtimeClient` is initialized
+
+   ```ts
+   const clientRef = useRef<RealtimeClient>(
+		new RealtimeClient(
+			USE_LOCAL_RELAY_SERVER_URL
+				? {
+						url: USE_LOCAL_RELAY_SERVER_URL,
+						apiKey: apiKey,
+						dangerouslyAllowAPIKeyInBrowser: true,
+					}
+				: {
+						apiKey: apiKey,
+						dangerouslyAllowAPIKeyInBrowser: true,
+					},
+		),
+	);
+
+
+  ```
+  </Accordion>
+
+  that's it, you should see your calls in the dashboard now!
+  </Step>
+</Steps>
+
+
+
+{/* 
 
 ## Setting up
 
@@ -68,4 +171,4 @@ Update your docs to your brand and add valuable content for the best user conver
   >
     Check out our showcase of our favorite documentation
   </Card>
-</CardGroup>
+</CardGroup> */}

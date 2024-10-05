@@ -1,0 +1,88 @@
+---
+title: 'proxy modes'
+description: 'what are proxy modes?'
+---
+
+
+<Frame caption="just having some fun with some midjourney images!">
+  <img src="/images/proxy.png" />
+</Frame>
+
+<Note>
+ going to be using `openai` instead of `voice ai provider`, if yo have some other provider it should work the same more or less
+</Note>
+
+proxy modes are how you relay your `wss` (or `webrtc` in the future) connection between your `client` and your `voice ai provider`.
+
+
+by your client, i generally mean your `browser` or `mobile` app.
+
+<Info>
+ if you are using a server to make calls, directly then you can skip this section.
+</Info>
+
+
+
+
+## default proxy mode (in-secure)
+
+here your `client` -> `volt relay` -> `openai`, where `volt` directly forwards all your authentication headers to `openai`.
+
+this means your `openai-api-key` is exposed to both your `client` and to `volt`.
+
+this is super straight forward and easy to setup, but it is not recommended for production use.
+
+here is an example of what this looks like:
+
+```mermaid
+sequenceDiagram
+participant Client
+participant Volt Relay Server
+participant OpenAI
+participant Volt Auth Server
+Client->>Volt Relay Server: Connect with VOLT API key and OPENAI API key
+Volt Relay Server->>Volt Auth Server: Validate API key
+Volt Auth Server-->>Volt Relay Server: API key valid
+Volt Relay Server->>OpenAI: Connect with OPENAI API key
+Client->>Volt Relay Server: Send message
+Volt Relay Server->>OpenAI: Relay message
+OpenAI-->>Volt Relay Server: Response
+Volt Relay Server-->>Client: Relay response
+```
+
+## secure session proxy (draft)
+
+<Note>this is not available yet, will be coming soon</Note>
+
+explaing on that, i wouldn't use the word RFC cause not that big a company but you can think of this as a draft of what this might look like
+
+here you would imagine something like the following:
+
+- you store your `openai-api-key` in the `volt` dashboard, and get a secret key for this. the api key can only be decrypted with said `secret-key`
+- your `server` creates a session with `volt auth server` with said `secret-key`, returns a `session-id` and a short lived token
+- your `client` uses the `session-id` and `short-lived-token` to connect to `volt relay server`
+- `volt relay server` connects to `openai` using the `openai-api-key`
+
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Your Server
+    participant Volt Auth Server
+    participant Volt Relay Server
+    participant OpenAI
+
+    Your Server->>Volt Auth Server: Create session with secret key
+    Volt Auth Server-->>Your Server: Return session-id and short-lived token
+    Your Server->>Client: Provide session-id and short-lived token
+    Client->>Volt Relay Server: Connect with session-id and short-lived token
+    Volt Relay Server->>Volt Auth Server: Validate session and token
+    Volt Auth Server-->>Volt Relay Server: Session valid, provide decrypted OpenAI API key
+    Volt Relay Server->>OpenAI: Connect with OpenAI API key
+    Client->>Volt Relay Server: Send message
+    Volt Relay Server->>OpenAI: Relay message
+    OpenAI-->>Volt Relay Server: Response
+    Volt Relay Server-->>Client: Relay response
+```
+
+would love thoughts on this specifically, please reach out [@cryogenicplanet](https://twitter.com/cryogenicplanet)
