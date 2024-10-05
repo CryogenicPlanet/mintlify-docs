@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "volt (relay.bench.audio docs)",
+  "name": "volt (volt.bench.audio docs)",
   "logo": {
     "dark": "/logo/logo.png",
     "light": "/logo/logo.png"
