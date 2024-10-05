@@ -39,6 +39,12 @@
         "introduction",
         "proxy-modes"
       ]
+    },
+    {
+      "group": "examples",
+      "pages": [
+        "examples/openai-realtime-console"
+      ]
     }
   ],
   "footerSocials": {

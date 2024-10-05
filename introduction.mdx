@@ -68,46 +68,13 @@ this is an example using default (`in-secure`) proxy mode, to learn more about p
    ```
 
 
-  <Accordion title="using openai-realtime-console? two more steps (small once i promise)">
  
 
-   if you are using [openai-realtime-console](https://github.com/openai/openai-realtime-console?tab=readme-ov-file), you will have to make these slight changes
+   if you are using [openai-realtime-console](https://github.com/openai/openai-realtime-console?tab=readme-ov-file), you will have to make these slight changes you can see them [here](/examples/openai-realtime-console)
 
 
 
-   1. update where the api key is gotten from `localStorage`
    
-   ```ts
-   const apiKey =
-		localStorage.getItem("tmp::voice_api_key") ||
-		prompt("OpenAI API Key") ||
-		"";
-	if (apiKey !== "") {
-		localStorage.setItem("tmp::voice_api_key", apiKey);
-	}
-   ```
-
-   2. update where the `RealtimeClient` is initialized
-
-   ```ts
-   const clientRef = useRef<RealtimeClient>(
-		new RealtimeClient(
-			USE_LOCAL_RELAY_SERVER_URL
-				? {
-						url: USE_LOCAL_RELAY_SERVER_URL,
-						apiKey: apiKey,
-						dangerouslyAllowAPIKeyInBrowser: true,
-					}
-				: {
-						apiKey: apiKey,
-						dangerouslyAllowAPIKeyInBrowser: true,
-					},
-		),
-	);
-
-
-  ```
-  </Accordion>
 
   that's it, you should see your calls in the dashboard now!
   </Step>

@@ -1,0 +1,55 @@
+---
+title: 'openai realtime console'
+description: 'use volt with openai realtime api'
+---
+
+you can clone and follow the readme, to get it working!
+
+cloneable example here: https://github.com/CryogenicPlanet/volt-openai-realtime-console-example
+
+
+
+
+## changes to make
+
+1. update where the api key is gotten from `localStorage`
+   
+   ```ts
+   const apiKey =
+		localStorage.getItem("tmp::voice_api_key") ||
+		prompt("OpenAI API Key") ||
+		"";
+	if (apiKey !== "") {
+		localStorage.setItem("tmp::voice_api_key", apiKey);
+	}```
+
+2. update where the `RealtimeClient` is initialized
+
+   ```ts
+   const clientRef = useRef<RealtimeClient>(
+		new RealtimeClient(
+			USE_LOCAL_RELAY_SERVER_URL
+				? {
+						url: USE_LOCAL_RELAY_SERVER_URL,
+						apiKey: apiKey,
+						dangerouslyAllowAPIKeyInBrowser: true,
+					}
+				: {
+						apiKey: apiKey,
+						dangerouslyAllowAPIKeyInBrowser: true,
+					},
+		),
+	);
+	```
+
+<Note>
+the offical `@openai/realtime-api-beta` does not allow for custom query params in the url, this is blocking us from using it with `volt_token=`.
+
+
+you could use `X-VOLT-TOKEN` in the headers instead but you would still need to patch the `@openai/realtime-api-beta` lib to allow for custom headers.
+
+the before PR is the fix that for custom query params, you can follow along there:
+https://github.com/openai/openai-realtime-api-beta/pull/11
+
+for now, you can use an older version of `openai-realtime-console` with the sdk is inlined and can be fixed.
+</Note>
