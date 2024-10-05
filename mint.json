@@ -23,13 +23,13 @@
   ],
   "topbarCtaButton": {
     "name": "dashboard",
-    "url": "https://relay.bench.audio"
+    "url": "https://volt.bench.audio"
   },
   "anchors": [
     {
       "name": "community",
       "icon": "discord",
-      "url": "https://relay.bench.audio/discord"
+      "url": "https://volt.bench.audio/discord"
     }
   ],
   "navigation": [
